@@ -1,0 +1,9 @@
+set nocompatible                " Désactive la compatibilité avec vi
+runtime! config/**/*.vim	" Charge les fichiers de conf *.vim
+
+
+" Plugins
+set runtimepath+=${HOME}/.vim/bundle/lightline.vim   " Mode bar
+set runtimepath+=${HOME}/.vim/bundle/vim-gitgutter   " Git line status
+set runtimepath+=${HOME}/.vim/bundle/delimitMate     " Auto bracket, ...
+set runtimepath+=${HOME}/.vim/bundle/Colorizer       " Color hex & RGB codes
