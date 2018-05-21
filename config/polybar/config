@@ -133,6 +133,8 @@ ws-icon-default = 
 [module/date]
 type = internal/date
 
+interval = 1.0
+
 date =   %{F#8a7f8f}%a, %d %B %Y%{F-}  %{F#ddd}%H:%M%{F-}
 date-alt =   %{F#8a7f8f}%A, %d %B %Y%{F-}  %H:%M:%S
 

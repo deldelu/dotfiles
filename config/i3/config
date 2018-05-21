@@ -107,9 +107,10 @@ set $ws10 "10"
 assign [class="Firefox"] $ws2
 assign [class="Enpass"] $ws2
 
-# Lauch appli on startup in a specific workplace
+# Launch appli on startup in a specific workplace
 exec --no-startup-id compton
 exec --no-startup-id /opt/Enpass/bin/runenpass.sh
+exec --no-startup-id redshift-gtk
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
