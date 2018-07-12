@@ -1,74 +1,169 @@
-########################
-#        Colors        #
-########################
+;             _       _                                   __ _       
+; _ __   ___ | |_   _| |__   __ _ _ __    ___ ___  _ __  / _(_) __ _ 
+;| '_ \ / _ \| | | | | '_ \ / _` | '__|  / __/ _ \| '_ \| |_| |/ _` |
+;| |_) | (_) | | |_| | |_) | (_| | |    | (_| (_) | | | |  _| | (_| |
+;| .__/ \___/|_|\__, |_.__/ \__,_|_|     \___\___/|_| |_|_| |_|\__, |
+;|_|            |___/                                          |___/ 
+
+
+##########################
+#         Colors         #
+##########################
 
 [colors]
-background = #00000000
-foreground = #ddd
-primary    = ${xrdb:i3.primary:#fff}
-secondary  = ${xrdb:i3.secondary:#aaa}
-alert      = ${xrdb:i3.alert:#ffbb22}
-unused     = #666
+; Base colors from .Xresources
+bg          =  ${xrdb:background}
+bg-alt      =  #c7d0de
+fg          =  ${xrdb:foreground}
+fg-alt      =  ${xrdb:color8}
+red         =  ${xrdb:color1}
+red-alt     =  ${xrdb:color9}
+green       =  ${xrdb:color2}
+green-alt   =  ${xrdb:color10}
+yellow      =  ${xrdb:color3}
+yellow-alt  =  ${xrdb:color11}
+blue        =  ${xrdb:color4}
+blue-alt    =  ${xrdb:color12}
+magenta     =  ${xrdb:color5}
+magenta-alt =  ${xrdb:color13}
+cyan        =  ${xrdb:color6}
+cyan-alt    =  ${xrdb:color14}
+white       =  ${xrdb:color7}
+white-alt   =  ${xrdb:color15}
 
-########################
-#         Bars         #
-########################
+primary     =  ${xrdb:primary}
+
+##########################
+#        Global WM       #
+##########################
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+
+##########################
+#      Bar Settings      #
+##########################
 
 [bar/topbar]
-width = 100%
-height = 40
-radius = 0.0
-border-size = 0
-border-color = ${colors.background}
+;monitor   = ${env:MONITOR:eDP-1}
+bottom    = false
+width     = 100%
+height    = 34
+offset-x  = 0
+offset-y  = 0
+
+background = ${colors.bg}
+foreground = ${colors.fg}
+
+border-bottom-size = 0
+border-bottom-color = ${colors.bg}
+border-top-size = 0
+border-top-color = ${colors.bg}
+
+spacing = 0
+padding-left = 0
+padding-right = 4
+module-margin-left = 1
+module-margin-right = 1
+
+font-0 = Hack:size=9;3
+font-1 = FontAwesome:size=11;4
+font-2 = FontAwesome:size=13;3
+font-3 = Hack:size=6;3
+font-4 = Material Design Icons:size=11;3
+font-5 = Hack:style=bold:size=10;3
+
+;tray-position = left
+;tray-padding = 1
+;tray-transparent = false
+;tray-background = #020202
+
 fixed-center = true
 
-background = ${colors.background}
-foreground = ${colors.foreground}
+modules-left   = i3
+modules-center = date time
+modules-right  = cpu memory temperature wireless-network wired-network volume battery powermenu
 
-font-0 = DejaVu Sans:size=10;2
-font-1 = FontAwesome:size=12;3
-font-2 = FontAwesome:size=20;6
-font-3 = DejaVu Sans:size=6;2
-font-4 = Material Design Icons:size=14;3
 
-modules-left   = memory cpu
-modules-center = i3
-modules-right  = wireless-network wired-network volume battery date
+##########################
+#     i3 (Workplaces)    #
+##########################
 
-tray-position    = left
-tray-padding     = 8
-tray-maxsize     = 20
-tray-transparent = true
+[module/i3]
+type = internal/i3
 
-scroll-up = i3wm-wsnext
-scroll-down = i3wm-wsprev
+index-sort = true
+reverse-scroll = false
 
-### Margin & Padding ###
-module-margin = 3
-padding-right = 5
-padding-left = 0
-spacing = 2
+format = <label-state>
+
+label-focused = %icon%
+label-focused-foreground = ${colors.bg}
+label-focused-background = ${colors.fg}
+label-focused-padding = 2
+label-focused-font = 3
+
+label-unfocused = %icon%
+label-unfocused-foreground = ${colors.fg}
+label-unfocused-background = ${colors.bg}
+label-unfocused-padding = 2
+label-unfocused-font = 3
+
+label-urgent = %icon%
+label-urgent-foreground = ${colors.red}
+label-urgent-background = ${colors.bg}
+label-urgent-padding = 2
+label-urgent-font = 3
+
+label-visible = %icon%
+label-visible-foreground = ${colors.fg}
+label-visible-background = ${colors.bg}
+label-visible-padding = 2
+label-visible-font = 3
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 5;
+ws-icon-3 = 9;
+ws-icon-4 = 10;
+ws-icon-default = 
+
 
 ########################
-#          RAM         #
+#         Date         #
 ########################
 
-[module/memory]
-type = internal/memory
-format = <label><bar-used>
-label = 
-label-font = 5
+[module/date]
+type = internal/date
+interval = 1.0
+label-font = 6
+date = "%A, %d %B %Y"
+label = "%date%"
+label-foreground = ${colors.fg}
+label-background = ${colors.bg}
+label-padding-right = 0
+label-padding-left = 0 
 
-interval = 4
-bar-used-width = 10
 
-bar-used-indicator =
-bar-used-fill = "  █"
-bar-used-fill-font = 4
-bar-used-fill-foreground = ${colors.primary}
-bar-used-empty = "  █"
-bar-used-empty-font = 4
-bar-used-empty-foreground = ${colors.secondary}
+########################
+#         Time         #
+########################
+
+[module/time]
+type = internal/date
+interval = 1.0
+
+label = %time%  
+time = %H:%M
+
+label-padding-right = 4
+label-padding-left = 0
+label-font = 6
+
+format-background = ${colors.bg}
+format-foreground = ${colors.primary}
 
 
 ########################
@@ -92,81 +187,108 @@ ramp-coreload-4 = ▅
 ramp-coreload-5 = ▆
 ramp-coreload-6 = ▇
 ramp-coreload-7 = █
-ramp-coreload-foreground = ${colors.secondary}
-
-########################
-#      Workspaces      #
-########################
-
-[module/i3]
-type = internal/i3
-
-index-sort = true
-reverse-scroll = false
-
-format = <label-state>
-
-label-unfocused = %icon%
-label-unfocused-foreground = ${colors.secondary}
-label-unfocused-padding = 4
-label-unfocused-font = 3
-
-label-focused = %icon%
-label-focused-foreground = ${colors.primary}
-label-focused-padding = 4
-label-focused-font = 3
-
-label-urgent = %icon%
-label-urgent-foreground = ${colors.alert}
-label-urgent-padding = 4
-label-urgent-font = 3
-
-ws-icon-0= 1;
-ws-icon-1= 2;
-ws-icon-2= 10;
-ws-icon-default = 
-
-########################
-#         Date         #
-########################
-
-[module/date]
-type = internal/date
-
-interval = 1.0
-
-date =   %{F#8a7f8f}%a, %d %B %Y%{F-}  %{F#ddd}%H:%M%{F-}
-date-alt =   %{F#8a7f8f}%A, %d %B %Y%{F-}  %H:%M:%S
+ramp-coreload-foreground = ${colors.primary}
 
 
 ########################
-#       Battery        #
+#          RAM         #
 ########################
 
-[module/battery]
-type = internal/battery
-battery = BAT1
-adapter = ADP1
-full-at = 95
+[module/memory]
+type = internal/memory
+format = <label> <bar-used>
+label = 
+label-font = 5
 
-format-charging = <animation-charging> <label-charging>
-format-discharging = <ramp-capacity> <label-discharging>
-format-full = <ramp-capacity>
+interval = 4.0
+bar-used-width = 12
 
-ramp-capacity-0 = 
-ramp-capacity-0-foreground = #ff5555
-ramp-capacity-1 = 
-ramp-capacity-1-foreground = #ffa900
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
+bar-used-indicator =
+;bar-used-fill = " █"
+bar-used-fill = "▐"
+bar-used-fill-font = 4
+bar-used-fill-foreground = ${colors.primary}
+;bar-used-empty = " █"
+bar-used-empty = "▐"
+bar-used-empty-font = 4
+bar-used-empty-foreground = ${colors.fg-alt}
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-3 = 
-animation-charging-framerate = 1300
+bar-used-foreground-0 = ${colors.fg}
+bar-used-foreground-1 = ${colors.fg}
+bar-used-foreground-2 = ${colors.yellow}
+bar-used-foreground-3 = ${colors.red}
 
+
+########################
+#     Temperature      #
+########################
+
+[module/temperature]
+type = internal/temperature
+interval = 3.0
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input
+
+warn-temperature = 80
+
+format = <ramp> <label>
+format-warn = <ramp> <label-warn>
+
+label = %temperature%
+label-foreground = ${colors.fg}
+label-warn = %temperature%
+label-warn-foreground = ${colors.red}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-3 = 
+
+ramp-foreground = ${colors.fg}
+
+########################
+#         WiFi         #
+########################
+
+[module/wireless-network]
+type = internal/network
+interface = wlp2s0
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+label-connected = %essid% (%local_ip%)   %downspeed:8%   %upspeed:8%
+label-disconnected = 
+label-disconnected-foreground = #666
+label-disconnected-font = 4
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-font = 4
+
+format-packetloss = <animation-packetloss> <label-connected>
+
+; Only applies if <animation-packetloss> is used
+animation-packetloss-0 = ⚠
+animation-packetloss-0-foreground = #ffa64c
+animation-packetloss-1 = 📶
+animation-packetloss-1-foreground = #000000
+; Framerate in milliseconds
+animation-packetloss-framerate = 500
+
+
+########################
+#       Ethernet       #
+########################
+
+[module/wired-network]
+type = internal/network
+interface = enp3s0
+interval = 3.0
+
+format-connected = <label-connected>
+label-connected =  %local_ip%   %downspeed:8%   %upspeed:8%
 
 
 ########################
@@ -183,7 +305,7 @@ use-ui-max = false
 format-volume = <ramp-volume> <label-volume>
 
 label-muted =  
-label-muted-foreground = ${colors.foreground}
+label-muted-foreground = ${colors.fg}
 label-muted-font = 4
 
 ramp-volume-0 = 
@@ -191,36 +313,68 @@ ramp-volume-1 = 
 ramp-volume-2 = 
 ramp-volume-font = 4
 
+
 ########################
-#       Network        #
+#       Battery        #
 ########################
 
+[module/battery]
+type = internal/battery
+battery = BAT1
+adapter = ADP1
+full-at = 95
 
-[module/wireless-network]
-type = internal/network
-interface = wlp2s0
-interval = 3.0
+format-charging = <animation-charging>  <label-charging>
+format-discharging = <ramp-capacity>  <label-discharging> 
+format-full = <ramp-capacity>
 
-format-connected = <ramp-signal> <label-connected>
-label-connected = %essid%
-label-disconnected = 
-label-disconnected-foreground = ${colors.unused}
-label-disconnected-font = 4
-#format-packetloss = <label-connected>
+ramp-capacity-0 =  
+ramp-capacity-0-foreground = ${colors.red}
+ramp-capacity-1 =  
+ramp-capacity-1-foreground = ${colors.yellow}
+ramp-capacity-2 =  
+ramp-capacity-3 =  
+ramp-capacity-4 =  
 
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
-ramp-signal-font = 4
+animation-charging-0 =  
+animation-charging-1 =  
+animation-charging-2 =  
+animation-charging-3 =  
+animation-charging-framerate = 1000
 
-[module/wired-network]
-type = internal/network
-interface = wlp2s0
-interval = 3.0
 
-label-connected =   %local_ip%
-label-disconnected-foreground = ${colors.unused}
+########################
+#       Powermenu      #
+########################
+
+[module/powermenu]
+type = custom/menu
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.fg}
+label-close = 
+label-close-foreground = ${colors.primary}
+label-separator = " " 
+label-separator-foreground = ${colors.fg-alt}
+
+menu-0-0 = 
+menu-0-0-exec = systemctl reboot
+menu-0-1 = 
+menu-0-1-exec = systemctl poweroff
+menu-0-2 = 
+menu-0-2-exec = i3-msg exit
+
+
+
+
+#### TEST ####
+[module/redshift]
+type = custom/script
+interval = 5
+
+exec = ~/.config/polybar/scripts/redshift.sh
+#click-left = ~/scripts/red.sh
 
 ; vim:ft=dosini

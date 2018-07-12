@@ -24,7 +24,7 @@ bindsym $mod+Shift+q kill
 
 # start program launcher (rofi)
 bindsym $mod+d exec rofi -show drun -display-drun ""
-bindsym $mod+Shift+d exec rofi -show run -display-run ":"
+bindsym $mod+Shift+d exec rofi -show run -display-run "$"
 
 # change focus
 #bindsym $mod+j focus left
@@ -109,7 +109,6 @@ assign [class="Enpass"] $ws2
 
 # Launch appli on startup in a specific workplace
 exec --no-startup-id compton
-exec --no-startup-id /opt/Enpass/bin/runenpass.sh
 exec --no-startup-id redshift-gtk
 
 # switch to workspace
@@ -199,8 +198,8 @@ smart_gaps on
 smart_borders on
 
 # Set inner/outer gaps
-gaps inner 30
-gaps outer 0
+gaps inner 25
+gaps outer 15
 
 
 #########################
@@ -210,22 +209,41 @@ gaps outer 0
 # Police
 font pango:DejaVu Sans 9
 
-# Colors variables
-set_from_resource $primary i3.primary
-set_from_resource $secondary i3.secondary
-set_from_resource $alert i3.alert
+# Custom colors
+set_from_resource $black       color8  #000000
+set_from_resource $darkblack   color0  #000000
+set_from_resource $darkred     color1  #000000
+set_from_resource $red         color9  #000000
+set_from_resource $darkgreen   color2  #000000
+set_from_resource $green       color10 #000000
+set_from_resource $darkyellow  color3  #000000
+set_from_resource $yellow      color11 #000000
+set_from_resource $darkblue    color4  #000000
+set_from_resource $blue        color12 #000000
+set_from_resource $darkmagenta color5  #000000
+set_from_resource $magenta     color13 #000000
+set_from_resource $darkcyan    color6  #000000
+set_from_resource $cyan        color14 #000000
+set_from_resource $white       color7  #000000
+set_from_resource $darkwhite   color15 #000000
 
-# class                 border   backgr.    text    indicator child_border
-client.focused          $primary $primary   #ddd    #2e9ef4   $primary
-client.focused_inactive #333333  #5f676a    #ffffff #484e50   #5f676a
-client.unfocused        #333333  #222222    #dddddd #292d2e   #555555
-client.urgent           #2f343a  $alert     #ffffff $alert    $alert
-client.placeholder      #000000  #0c0c0c    #ffffff #000000   #0c0c0c
+set_from_resource $background  background #2b303b
+set_from_resource $foreground  foreground #c0c5ce
+set_from_resource $border      background #2b303b
+set_from_resource $text        color7     #eff1f5
+set_from_resource $active      color4     #bfa1b3
+set_from_resource $inactive    color15    #c0c5ce
 
-client.background       #ffffff
+# window colors         Border      Background  Text        Indicator   Child_Border
+client.focused          $border     $background $text       $background $background
+client.focused_inactive $border     $background $text       $background $background
+client.unfocused        $border     $background $text       $background $background
+client.urgent           $border     $background $text       $background $background
+client.placeholder      $border     $background $text       $background $background
+client.background $background
 
 # Polybar
 exec_always --no-startup-id "killall polybar; polybar -r topbar"
 
 # Background
-exec_always --no-startup-id feh --bg-fill $HOME/Pictures/galaxy.jpg
+exec_always --no-startup-id feh --bg-fill $HOME/Pictures/cyberpunk.jpg
