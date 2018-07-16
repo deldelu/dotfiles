@@ -1,10 +1,10 @@
 [options]
-allow_bold = true
-font = Monospace 11
-clickable_url = true
+allow_bold       = true
+font             = Monospace 11
+clickable_url    = true
 scrollback_lines = 10000
-hyperlinks = true
-border_width = 20
+hyperlinks       = true
+border_width     = 20
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 browser = firefox
@@ -13,9 +13,7 @@ scrollbar = off
 
 [colors]
 background = #2b303b
-
-# If unset, will reverse foreground and background
-highlight = #2f2f2f
+foreground = #c0c5ce
 
 # Colors from color0 to color254 can be set
 
@@ -53,7 +51,7 @@ color15 = #ededec
 
 
 # For vim
-color237=  #363c4a
+color237 = #363c4a
 
 # vim: ft=dosini cms=#%s
 
