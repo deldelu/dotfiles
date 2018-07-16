@@ -106,6 +106,7 @@ set $ws10 "10"
 # Assin Application to workspace
 assign [class="Firefox"] $ws2
 assign [class="Enpass"] $ws2
+assign [class="discord"] $ws5
 
 # Launch appli on startup in a specific workplace
 exec --no-startup-id compton
