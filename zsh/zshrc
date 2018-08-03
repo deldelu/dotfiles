@@ -1,6 +1,9 @@
 # Path to your oh-my-zsh installation
 export ZSH=$HOME/.oh-my-zsh
 
+# Term used
+export TERM=vt100
+
 # Theme
 ZSH_THEME="gentoo"
 

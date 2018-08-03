@@ -322,7 +322,7 @@ ramp-volume-font = 4
 type = internal/battery
 battery = BAT1
 adapter = ADP1
-full-at = 95
+full-at = 92
 
 format-charging = <animation-charging>  <label-charging>
 format-discharging = <ramp-capacity>  <label-discharging> 
