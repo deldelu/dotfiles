@@ -82,9 +82,9 @@ font-5 = Hack:style=bold:size=10;3
 
 fixed-center = true
 
-modules-left   = i3
-modules-center = date time
-modules-right  = cpu memory temperature wireless-network wired-network volume battery powermenu
+modules-left   = i3 cpu memory temperature
+modules-center = date time 
+modules-right  = wireless-network wired-network volume battery powermenu
 
 
 ##########################
@@ -324,9 +324,9 @@ battery = BAT1
 adapter = ADP1
 full-at = 92
 
-format-charging = <animation-charging>  <label-charging>
-format-discharging = <ramp-capacity>  <label-discharging> 
-format-full = <ramp-capacity>
+format-charging = <animation-charging> <label-charging> 
+format-discharging = <ramp-capacity> <label-discharging>  
+format-full = "<ramp-capacity> " 
 
 ramp-capacity-0 =  
 ramp-capacity-0-foreground = ${colors.red}
@@ -356,7 +356,7 @@ label-open = 
 label-open-foreground = ${colors.fg}
 label-close = 
 label-close-foreground = ${colors.primary}
-label-separator = " " 
+label-separator = " "
 label-separator-foreground = ${colors.fg-alt}
 
 menu-0-0 = 
