@@ -1,10 +1,10 @@
-filetype plugin indent on 	" Use this to allow intelligent auto-indenting
+"filetype plugin indent on 	" Use this to allow intelligent auto-indenting
 syntax on			" Active la coloration syntaxique
 
 set encoding=utf-8  " Encoding
 set wildmenu	    " Better command-line completion
-set smartindent     " Indentation intelligente
-set autoindent      " Conserve l'indentation sur une nouvelle ligne
+"set smartindent     " Indentation intelligente
+"set autoindent      " Conserve l'indentation sur une nouvelle ligne
 set ruler           " Affiche la position du curseur
 set number	    " Affiche les numéros de ligne
 set mouse=a	    " Active la souris
@@ -37,13 +37,13 @@ set errorbells
 set novisualbell
 set t_vb=
 
-" Overide background theme
+" Override background theme
 highlight Normal ctermbg=none  
 
-" Overide Current Line Color
+" Override Current Line Color
 highlight CursorLine guibg=#2d2d2d ctermbg=237
 
-" Overide Current line number Color
+" Override Current line number Color
 highlight CursorLineNr cterm=bold ctermfg=203 gui=bold guifg=#b3525b
 
 " === PLUGINS ===
@@ -59,5 +59,5 @@ if !has('gui_running')
 endif
 
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'powerline',
       \ }
