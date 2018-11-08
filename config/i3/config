@@ -107,6 +107,8 @@ set $ws10 "10"
 assign [class="Firefox"] $ws2
 assign [class="Enpass"] $ws2
 assign [class="discord"] $ws5
+assign [class="TelegramDesktop"] $ws5
+assign [class="Atom"] $ws3
 
 # Launch appli on startup in a specific workplace
 exec --no-startup-id compton
