@@ -15,7 +15,7 @@ ZSH_THEME="gentoo"
 ZSH_CUSTOM=$HOME/.zsh/custom
 
 # Command execution time stamp shown in the history command output
-HIST_STAMPS="dd/mm/yyyy"
+HIST_STAMPS="dd.mm.yyyy"
 
 # Plugins
 plugins=(
