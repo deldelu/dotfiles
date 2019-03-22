@@ -17,17 +17,22 @@ ZSH_CUSTOM=$HOME/.zsh/custom
 # Command execution time stamp shown in the history command output
 HIST_STAMPS="dd.mm.yyyy"
 
+# tmux
+ZSH_TMUX_AUTOSTART=true
+
 # Plugins
 plugins=(
     git
-    common-aliases
     gitfast
-    git-extras
+    common-aliases
     sudo
     encode64
     pip
     python
     urltools
+    docker
+    history
+    tmux
 )
 
 # Activate Oh My ZSH
