@@ -32,7 +32,7 @@ plugins=(
     urltools
     docker
     history
-    tmux
+#    tmux
 )
 
 # Activate Oh My ZSH

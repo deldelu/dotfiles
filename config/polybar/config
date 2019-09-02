@@ -47,7 +47,7 @@ margin-bottom = 0
 ##########################
 
 [bar/topbar]
-monitor   = ${env:MONITOR:eDP-1}
+monitor   = ${env:MONITOR:eDP1}
 bottom    = false
 width     = 100%
 height    = 34
@@ -75,57 +75,15 @@ font-3 = Hack:size=6;3
 font-4 = Material Design Icons:size=11;3
 font-5 = Hack:style=bold:size=10;3
 
-;tray-position = left
-;tray-padding = 1
-;tray-transparent = false
-;tray-background = #020202
+#tray-position = left
+#tray-padding = 1
+#tray-background = ${colors.bg}
 
 fixed-center = true
 
-modules-left   = i3 cpu memory temperature
+modules-left   = i3 cpu memory temperature redshift
 modules-center = date time 
 modules-right  = vpn wireless-network wired-network volume battery powermenu
-
-[bar/topbar2]
-monitor   = ${env:MONITOR:HDMI2}
-bottom    = false
-width     = 100%
-height    = 34
-offset-x  = 0
-offset-y  = 0
-
-background = ${colors.bg}
-foreground = ${colors.fg}
-
-border-bottom-size = 0
-border-bottom-color = ${colors.bg}
-border-top-size = 0
-border-top-color = ${colors.bg}
-
-spacing = 0
-padding-left = 0
-padding-right = 4
-module-margin-left = 1
-module-margin-right = 1
-
-font-0 = Hack:size=9;3
-font-1 = FontAwesome:size=11;4
-font-2 = FontAwesome:size=13;3
-font-3 = Hack:size=6;3
-font-4 = Material Design Icons:size=11;3
-font-5 = Hack:style=bold:size=10;3
-
-;tray-position = left
-;tray-padding = 1
-;tray-transparent = false
-;tray-background = #020202
-
-fixed-center = true
-
-modules-left   = i3 cpu memory temperature
-modules-center = date time 
-modules-right  = vpn wireless-network wired-network volume battery powermenu
-
 
 
 ##########################
@@ -170,9 +128,13 @@ label-visible-font = 3
 ws-icon-0 = 1;
 ws-icon-1 = 2;
 ws-icon-2 = 3;
-ws-icon-3 = 5;
-ws-icon-4 = 9;
-ws-icon-5 = 10;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
 ws-icon-default = 
 
 
@@ -241,7 +203,7 @@ ramp-coreload-foreground = ${colors.primary}
 
 [module/memory]
 type = internal/memory
-format = <label> <bar-used>
+format = <label> <bar-used> 
 label = 
 label-font = 5
 
@@ -249,11 +211,9 @@ interval = 4.0
 bar-used-width = 12
 
 bar-used-indicator =
-;bar-used-fill = " █"
 bar-used-fill = "▐"
 bar-used-fill-font = 4
 bar-used-fill-foreground = ${colors.primary}
-;bar-used-empty = " █"
 bar-used-empty = "▐"
 bar-used-empty-font = 4
 bar-used-empty-foreground = ${colors.fg-alt}
@@ -273,6 +233,7 @@ type = internal/temperature
 interval = 3.0
 hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input
 
+base-temperature = 30
 warn-temperature = 80
 
 format = <ramp> <label>
@@ -345,7 +306,7 @@ interface = enp3s0
 interval = 3.0
 
 format-connected = <label-connected>
-label-connected =  %local_ip%   %downspeed:8%   %upspeed:8%
+label-connected =  %local_ip%   %downspeed:8%   %upspeed:8%
 
 
 ########################
@@ -379,7 +340,7 @@ ramp-volume-font = 4
 type = internal/battery
 battery = BAT1
 adapter = ADP1
-full-at = 92
+full-at = 90
 
 format-charging = <animation-charging> <label-charging> 
 format-discharging = <ramp-capacity> <label-discharging>  

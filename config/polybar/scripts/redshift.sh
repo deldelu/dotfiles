@@ -8,10 +8,10 @@ if [ "$(pgrep -x redshift)" ]; then
     if [ -z "$temp" ]; then
         echo "%{F#65737E} "$icon
     elif [ "$temp" -ge 5000 ]; then
-        echo "%{F#8FA1B3} #"$icon
+        echo "%{F#8FA1B3} "$icon
     elif [ "$temp" -ge 4000 ]; then
-        echo "%{F#EBCB8B} #"$icon
+        echo "%{F#EBCB8B} "$icon
     else
-        echo "%{F#D08770} #"$icon
+        echo "%{F#D08770} "$icon
     fi
 fi

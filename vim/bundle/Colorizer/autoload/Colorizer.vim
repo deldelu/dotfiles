@@ -982,7 +982,9 @@ function! s:PreviewColorHex(match) "{{{2
         " skip coloring comments
         return
     endif
-    let color = (a:match[0] == '#' ? a:match[1:] : a:match)
+    " Make sure the pattern matches the complete string, so anchor it
+    " explicitly at the end (see #64)
+    let color = matchstr(a:match, s:hex_pattern[1]."$")
     let pattern = color
     if len(color) == 3
         let color = substitute(color, '.', '&&', 'g')
@@ -1327,6 +1329,12 @@ function! s:ColorInit(...) "{{{1
         call Colorizer#AutoCmds(g:colorizer_auto_color)
     endif
 
+    " disable terminal coloring for all filetypes except text files
+    " it's too expensive and probably does not make sense to enable it for
+    " other filetypes
+    let s:colorizer_term_disable = !(empty(&filetype) || &filetype != 'text')
+    let s:colorizer_nroff_disable = !(empty(&filetype) || &filetype != 'text')
+
     " Debugging
     let s:debug = get(g:, 'colorizer_debug', 0)
 
@@ -1465,19 +1473,19 @@ function! s:ColorInit(...) "{{{1
         \ 'taskwarrior':  ['^color[^=]*=\zs.\+$',
             \ function("s:PreviewTaskWarriorColors"), 'colorizer_taskwarrior', 'expand("%:e") ==# "theme"', [] ],
         \ 'hex': [join(s:hex_pattern, ''), function("s:PreviewColorHex"), 'colorizer_hex', 1, [] ],
-        \ 'vimhighl_dump': ['^\v\w+\s+xxx%((\s+(term|cterm%([bf]g)?|gui%(%([bf]g|sp))?'.
-            \ ')\=[#0-9A-Za-z_,]+)+)?%(\_\s+links to \w+)?%( cleared)@!',
+        \ 'vimhighl_dump': ['^\v\w+\s+<xxx>%((\s+(term|cterm%([bf]g)?|gui%(%([bf]g|sp))?)\='.
+            \ '[#0-9A-Za-z_,]+)+)?%(\_\s+links to \w+)?%( cleared)@!$',
             \ function("s:PreviewVimHighlightDump"), 'colorizer_vimhighl_dump', 'empty(&ft)', [] ]
         \ }
 
     " term_conceal: patterns to hide, currently: [K$ and the color patterns [0m[01;32m
     let s:color_patterns_special = {
-        \ 'term': ['\%(\%x1b\[0m\)\?\(\%(\%x1b\[\d\+\%([:;]\d\+\)*m\)\+\)\([^\e]*\)\(\%x1b\%(\[0m\|\[K\)\)\=',
+        \ 'term': ['\%(\%(\%x1b\|\\033\)\[0m\)\?\(\%(\%(\%x1b\|\\033\)\[\d\+\%([:;]\d\+\)*m\)\+\)\([^\e]*\)\(\%(\%x1b\|\\033\)\%(\[0m\|\[K\)\)\=',
             \ function("s:PreviewColorTerm"), 'colorizer_term', [] ],
         \ 'term_nroff': ['\%(\(.\)\%u8\1\)\|\%(_\%u8.\)', function("s:PreviewColorNroff"), 'colorizer_nroff', [] ],
         \ 'term_conceal': [ ['\%(\(\%(\%x1b\[0m\)\?\%x1b\[\d\+\%([;:]\d\+\)*\a\)\|\%x1b\[K$\)',
           \ '\%d13', '\%(\%x1b\[K\)', '\%(\%x1b\]\d\+;\d\+;\)', '\%(\%x1b\\\)',
-          \ '\%x1b(B\%x1b\[m', '\%x1b\[m\%x0f', '_\%u8.\@=', '\(.\)\%u8\%(\1\)\@='], 
+          \ '\%x1b(B\%x1b\[m', '\%x1b\[m\%(\%x0f\)\?', '_\%u8.\@=', '\(.\)\%u8\%(\1\)\@='], 
           \ '',
           \ 'colorizer_term_conceal', [] ]
         \ }
@@ -1689,7 +1697,16 @@ function! s:SetMatch(group, pattern, param_dict) "{{{1
         return
     endif
     " let 'hls' overrule our syntax highlighting
-    call matchadd(a:group, a:pattern, s:default_match_priority)
+
+    if has('nvim') &&
+      \ exists('g:colorizer_use_virtual_text')
+        let line_no = line('.')
+        let line_no -= 1
+        call nvim_buf_set_virtual_text(0, 0, line_no, [['  ', a:group]], {})
+    else
+        call matchadd(a:group, a:pattern, s:default_match_priority)
+    endif
+
     call add(w:match_list, a:pattern)
 endfunction
 
@@ -1847,7 +1864,15 @@ function! s:Ansi2Color(chars) "{{{1
                         \       34: printf("%.2X%.2X%.2X", 0,     0, 238),
                         \       35: printf("%.2X%.2X%.2X", 205,   0, 205),
                         \       36: printf("%.2X%.2X%.2X", 0,   205, 205),
-                        \       37: printf("%.2X%.2X%.2X", 229, 229, 229)
+                        \       37: printf("%.2X%.2X%.2X", 229, 229, 229),
+                        \       90: printf("%.2X%.2X%.2X", 127, 127, 127),
+                        \       91: printf("%.2X%.2X%.2X", 255,   0,   0),
+                        \       92: printf("%.2X%.2X%.2X",   0, 255,   0),
+                        \       93: printf("%.2X%.2X%.2X", 255, 255,   0),
+                        \       94: printf("%.2X%.2X%.2X",  92,  92, 255),
+                        \       95: printf("%.2X%.2X%.2X", 255,   0, 255),
+                        \       96: printf("%.2X%.2X%.2X",   0, 255, 255),
+                        \       97: printf("%.2X%.2X%.2X", 255, 255, 255)
                         \ }
         let s:term2ansi.bold = { 30: printf("%.2X%.2X%.2X", 127, 127, 127),
                         \        31: printf("%.2X%.2X%.2X", 255,   0,   0),
@@ -1856,7 +1881,15 @@ function! s:Ansi2Color(chars) "{{{1
                         \        34: printf("%.2X%.2X%.2X",  92,  92, 255),
                         \        35: printf("%.2X%.2X%.2X", 255,   0, 255),
                         \        36: printf("%.2X%.2X%.2X", 0,   255, 255),
-                        \        37: printf("%.2X%.2X%.2X", 255, 255, 255)
+                        \        37: printf("%.2X%.2X%.2X", 255, 255, 255),
+                        \        90: printf("%.2X%.2X%.2X", 127, 127, 127),
+                        \        91: printf("%.2X%.2X%.2X", 255,   0,   0),
+                        \        92: printf("%.2X%.2X%.2X",   0, 255,   0),
+                        \        93: printf("%.2X%.2X%.2X", 255, 255,   0),
+                        \        94: printf("%.2X%.2X%.2X",  92,  92, 255),
+                        \        95: printf("%.2X%.2X%.2X", 255,   0, 255),
+                        \        96: printf("%.2X%.2X%.2X",   0, 255, 255),
+                        \        97: printf("%.2X%.2X%.2X", 255, 255, 255)
                         \ }
     endif
 
@@ -1866,7 +1899,7 @@ function! s:Ansi2Color(chars) "{{{1
 
     if a:chars =~ '48;5;\d\+'
         let check[0] = 0
-    elseif a:chars=~ '.*3[0-7]\(;1\)\?[m;]'
+    elseif a:chars=~ '.*[39][0-7]\(;1\)\?[m;]'  " Check 30-37 and 90-97 colors
         let check[0] = 1
     elseif a:chars =~ '.*38\([:;]\)2\1'
         let check[0] = 2 " Uses True Color Support
@@ -1876,6 +1909,8 @@ function! s:Ansi2Color(chars) "{{{1
     elseif a:chars =~ '.*48\([:;]\)2\1'
         let check[1] = 2
     elseif a:chars=~ '.*4[0-7]\(;1\)\?[m;]'
+        let check[1] = 1
+    elseif a:chars=~ '.*10[0-7]\(;1\)\?[m;]'  " Same as 40-47
         let check[1] = 1
     endif
 
@@ -2341,13 +2376,13 @@ function! Colorizer#DoColor(force, line1, line2, ...) "{{{1
     endif
 
     for Pat in [ s:color_patterns_special.term, s:color_patterns_special.term_nroff ]
+        if !get(g:, Pat[2], 1) || (get(s:, Pat[2]. '_disable', 0) > 0)
+            " Coloring disabled, skip
+            continue
+        endif
         let start = s:Reltime()
         if (s:CheckTimeout(Pat[0], a:force)) && !s:IsInComment()
 
-            if !get(g:, Pat[2], 1) || (get(s:, Pat[2]. '_disable', 0) > 0)
-                " Coloring disabled
-                continue
-            endif
 
             if Pat[2] is# 'colorizer_nroff'
               let arg = '[submatch(0)]'
@@ -2453,10 +2488,24 @@ function! Colorizer#AutoCmds(enable) "{{{1
     if a:enable && !get(g:, 'colorizer_debug', 0)
         aug Colorizer
             au!
-            au InsertLeave *  sil call Colorizer#ColorLine('!', line('w0'), line('w$'))
-            au TextChangedI * sil call Colorizer#ColorLine('', line('.'),line('.'))
-            au GUIEnter,ColorScheme * sil call Colorizer#DoColor('!', 1, line('$'))
-            au WinEnter,BufWinEnter * sil call Colorizer#ColorWinEnter()
+            if get(g:, 'colorizer_insertleave', 1)
+              au InsertLeave *  sil call Colorizer#ColorLine('', line('w0'), line('w$'))
+            endif
+            if get(g:, 'colorizer_textchangedi', 1)
+              au TextChangedI * sil call Colorizer#ColorLine('', line('.'),line('.'))
+            endif
+            if get(g:, 'colorizer_guienter', 1)
+              au GUIEnter * sil call Colorizer#DoColor('!', 1, line('$'))
+            endif
+            if get(g:, 'colorizer_colorscheme', 1)
+              au ColorScheme * sil call Colorizer#DoColor('!', 1, line('$'))
+            endif
+            if get(g:, 'colorizer_bufwinenter', 1)
+              au BufWinEnter * sil call Colorizer#ColorWinEnter()
+            endif
+            if get(g:, 'colorizer_winenter', 1)
+              au WinEnter * sil call Colorizer#ColorWinEnter()
+            endif
         aug END
     else
         aug Colorizer
@@ -2470,16 +2519,32 @@ function! Colorizer#LocalFTAutoCmds(enable) "{{{1
     if a:enable
         aug FTColorizer
             au!
-            au InsertLeave <buffer> silent call
+            if !exists("#Colorizer#InsertLeave") && get(g:, 'colorizer_insertleave', 1)
+              " InsertLeave autocommand already exists
+              au InsertLeave <buffer> silent call
                         \ Colorizer#ColorLine('', line('w0'), line('w$'))
-            au CursorMoved,CursorMovedI <buffer> call Colorizer#ColorLine('',line('.'), line('.'))
-            au WinEnter,BufWinEnter <buffer> silent call Colorizer#ColorWinEnter()
-            "au BufLeave <buffer> call Colorizer#ColorOff()
-            au GUIEnter,ColorScheme <buffer> silent
-                        \ call Colorizer#DoColor('!', 1, line('$'))
-            if get(g:, 'colorizer_cursormoved', 0)
-                au CursorMoved,CursorMovedI * call Colorizer#ColorLine('', line('.'),line('.'))
-                au CusorHold, CursorHoldI * silent call Colorizer#ColorLine('!', line('w0'), line('w$'))
+            endif
+            if get(g:, 'colorizer_cursormovedi', 1)
+              au CursorMovedI <buffer> call Colorizer#ColorLine('',line('.'), line('.'))
+            endif
+            if get(g:, 'colorizer_cursormoved', 1)
+              au CursorMoved <buffer> call Colorizer#ColorLine('',line('.'), line('.'))
+            endif
+            if !exists("#Colorizer#BufWinEnter") && get(g:, 'colorizer_bufwinenter', 1)
+              au BufWinEnter <buffer> silent call Colorizer#ColorWinEnter()
+            endif
+            if !exists("#Colorizer#WinEnter") && get(g:, 'colorizer_winenter', 1)
+              au WinEnter <buffer> silent call Colorizer#ColorWinEnter()
+            endif
+            " disables colorizing on switching buffers inside a single window
+            if get(g:, 'colorizer_bufleave', 1)
+              au BufLeave <buffer> if !get(g:, 'colorizer_disable_bufleave', 0) | call Colorizer#ColorOff() |endif
+            endif
+            if !exists("#Colorizer#GUIEnter") && get(g:, 'colorizer_guienter', 1)
+              au GUIEnter <buffer> silent call Colorizer#DoColor('!', 1, line('$'))
+            endif
+            if !exists("#Colorizer#ColorScheme") && get(g:, 'colorizer_colorscheme', 1)
+              au ColorScheme <buffer> silent call Colorizer#DoColor('!', 1, line('$'))
             endif
         aug END
         if !exists("b:undo_ftplugin")
