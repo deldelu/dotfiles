@@ -121,7 +121,7 @@ assign [class="TelegramDesktop"] $ws5
 assign [class="Atom"] $ws3
 
 # Launch appli on startup in a specific workplace
-exec --no-startup-id compton
+exec --no-startup-id compton --dbus
 exec --no-startup-id redshift-gtk
 
 # switch to workspace
@@ -259,4 +259,4 @@ client.background $background
 exec_always --no-startup-id "bash ~/.config/i3/scripts/launch_polybar.sh"
 
 # Background
-exec_always --no-startup-id feh --bg-fill $HOME/Pictures/cyberpunk.jpg
+exec_always --no-startup-id feh --bg-fill $HOME/Pictures/circle.jpg
